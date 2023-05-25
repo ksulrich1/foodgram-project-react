@@ -16,7 +16,6 @@ class Command(BaseCommand):
             counter = 0
             for row in reader:
                 print(row[0])
-                Ingredient.objects.get_or_create(name=row[0],
-                                                 measurement_unit=row[1])
+                Ingredient.objects.get_or_create(name=row[0], measurement_unit=row[1])
                 counter += 1
         print(f"В базу данных успешно добавлены ингредиенты - {counter} шт. ✅")

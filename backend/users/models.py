@@ -8,22 +8,18 @@ CHAR_LEN_TWO = 20
 
 
 class User(AbstractUser):
-    email = models.EmailField(verbose_name='email address', unique=True)
+    email = models.EmailField(verbose_name="email address", unique=True)
     password = models.CharField(verbose_name="password", max_length=NAME_LEN)
-    first_name = models.CharField(verbose_name='Имя', max_length=NAME_LEN)
-    last_name = models.CharField(verbose_name='Фамилия', max_length=NAME_LEN)
+    first_name = models.CharField(verbose_name="Имя", max_length=NAME_LEN)
+    last_name = models.CharField(verbose_name="Фамилия", max_length=NAME_LEN)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [
-        'username',
-        'first_name',
-        'last_name'
-    ]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     class Meta:
-        ordering = ('id',)
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        ordering = ("id",)
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
 
     def __str__(self):
         return self.username[:CHAR_LEN]

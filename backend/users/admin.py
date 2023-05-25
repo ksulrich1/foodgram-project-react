@@ -7,18 +7,21 @@ from .models import Subscription, User
 @admin.register(User)
 class AdminUser(UserAdmin):
     list_display = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
-        'password',
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "password",
     )
-    list_filter = ('username', 'email',)
+    list_filter = (
+        "username",
+        "email",
+    )
 
 
 @admin.register(Subscription)
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = (
-        'subscriber',
-        'author',
+        "subscriber",
+        "author",
     )

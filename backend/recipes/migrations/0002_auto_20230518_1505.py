@@ -6,26 +6,47 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('recipes', '0001_initial'),
+        ("recipes", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Название тэга')),
-                ('slug', models.SlugField(max_length=200, unique=True, verbose_name='Адрес тэга')),
-                ('color', models.CharField(default='2c3cba', max_length=7, verbose_name='Цвет(HEX)')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=200, verbose_name="Название тэга"),
+                ),
+                (
+                    "slug",
+                    models.SlugField(
+                        max_length=200, unique=True, verbose_name="Адрес тэга"
+                    ),
+                ),
+                (
+                    "color",
+                    models.CharField(
+                        default="2c3cba", max_length=7, verbose_name="Цвет(HEX)"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Тег',
-                'verbose_name_plural': 'Теги',
+                "verbose_name": "Тег",
+                "verbose_name_plural": "Теги",
             },
         ),
         migrations.AlterField(
-            model_name='ingredient',
-            name='measurement_unit',
-            field=models.CharField(max_length=200, verbose_name='Единицы измерения'),
+            model_name="ingredient",
+            name="measurement_unit",
+            field=models.CharField(max_length=200, verbose_name="Единицы измерения"),
         ),
     ]
