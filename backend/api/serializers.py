@@ -84,33 +84,31 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientInRecipeSerializer(serializers.ModelSerializer):
-    """Сериализатор для просмотра игредиентов в рецепте"""
-
-    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
-    name = serializers.ReadOnlyField(source="ingredient.name")
-    measurement_unit = serializers.ReadOnlyField(source="ingredient.measurement_unit")
-
-    class Meta:
-        model = IngredientInRecipe
-        fields = (
-            "id",
-            "name",
-            "measurement_unit",
-            "amount",
-        )
-
-
-class IngredientInRecipeWriteSerializer(serializers.ModelSerializer):
     """Сериализатор игредиента при создании рецепта"""
 
     id = PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+    name = serializers.ReadOnlyField(source='ingredient.name')
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit')
 
     class Meta:
         model = IngredientInRecipe
-        fields = (
-            "id",
-            "amount",
-        )
+        fields = ('id', 'amount', 'name', 'measurement_unit')
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['id'] = instance.ingredient.id
+        return data
+
+
+class RecipePageSerializer(ModelSerializer):
+    """Сериализатор для отображения рецептов на странице подписок."""
+
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class RecipeReadSerializer(ModelSerializer):
@@ -118,7 +116,8 @@ class RecipeReadSerializer(ModelSerializer):
 
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
-    ingredients = IngredientInRecipeSerializer(source="recipeingredients", many=True)
+    ingredients = IngredientInRecipeSerializer(
+        source="recipeingredients", many=True)
     image = Base64ImageField()
     is_favorited = SerializerMethodField(read_only=True)
     is_in_shopping_cart = SerializerMethodField(read_only=True)
@@ -154,7 +153,8 @@ class RecipeReadSerializer(ModelSerializer):
 class RecipeCreateSerializer(ModelSerializer):
     """Сериализатор для создания рецептов"""
 
-    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True)
     author = UserSerializer(read_only=True)
     ingredients = IngredientInRecipeSerializer(many=True)
     image = Base64ImageField()
