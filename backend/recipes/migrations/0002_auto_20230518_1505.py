@@ -24,7 +24,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(max_length=200, verbose_name="Название тэга"),
+                    models.CharField(
+                        max_length=200, verbose_name="Название тэга"
+                    ),
                 ),
                 (
                     "slug",
@@ -35,7 +37,9 @@ class Migration(migrations.Migration):
                 (
                     "color",
                     models.CharField(
-                        default="2c3cba", max_length=7, verbose_name="Цвет(HEX)"
+                        default="2c3cba",
+                        max_length=7,
+                        verbose_name="Цвет(HEX)",
                     ),
                 ),
             ],
@@ -47,6 +51,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="ingredient",
             name="measurement_unit",
-            field=models.CharField(max_length=200, verbose_name="Единицы измерения"),
+            field=models.CharField(
+                max_length=200, verbose_name="Единицы измерения"
+            ),
         ),
     ]

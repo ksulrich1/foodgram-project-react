@@ -66,7 +66,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(max_length=200, verbose_name="Название рецепта"),
+                    models.CharField(
+                        max_length=200, verbose_name="Название рецепта"
+                    ),
                 ),
                 (
                     "image",
@@ -115,7 +117,9 @@ class Migration(migrations.Migration):
                 (
                     "tags",
                     models.ManyToManyField(
-                        related_name="recipes", to="recipes.Tag", verbose_name="Теги"
+                        related_name="recipes",
+                        to="recipes.Tag",
+                        verbose_name="Теги",
                     ),
                 ),
             ],
@@ -138,7 +142,8 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="ingredientinrecipe",
             constraint=models.UniqueConstraint(
-                fields=("ingredient", "recipe"), name="ingredient_in_recipe_repetition"
+                fields=("ingredient", "recipe"),
+                name="ingredient_in_recipe_repetition",
             ),
         ),
     ]

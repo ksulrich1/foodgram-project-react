@@ -12,8 +12,9 @@ DEFAULT_HEX = "2c3cba"
 
 class Ingredient(models.Model):
     name = models.CharField("Название ингредиента", max_length=MAX_LEN)
-    measurement_unit = models.CharField("Единицы измерения",
-                                        max_length=MAX_LEN)
+    measurement_unit = models.CharField(
+        "Единицы измерения", max_length=MAX_LEN
+    )
 
     class Meta:
         verbose_name = "Ингредиент"
@@ -32,8 +33,9 @@ class Ingredient(models.Model):
 class Tag(models.Model):
     name = models.CharField("Название тэга", max_length=MAX_LEN)
     slug = models.SlugField("Адрес тэга", unique=True, max_length=MAX_LEN)
-    color = models.CharField("Цвет(HEX)",
-                             max_length=HEX_LEN, default=DEFAULT_HEX)
+    color = models.CharField(
+        "Цвет(HEX)", max_length=HEX_LEN, default=DEFAULT_HEX
+    )
 
     class Meta:
         verbose_name = "Тег"
@@ -60,8 +62,9 @@ class Recipe(models.Model):
         related_name="recipes",
         through="IngredientInRecipe",
     )
-    tags = models.ManyToManyField(Tag, verbose_name="Теги",
-                                  related_name="recipes")
+    tags = models.ManyToManyField(
+        Tag, verbose_name="Теги", related_name="recipes"
+    )
     cooking_time = models.PositiveIntegerField(
         "Время приготовления",
         validators=(
@@ -70,8 +73,9 @@ class Recipe(models.Model):
             ),
         ),
     )
-    pub_date = models.DateTimeField(verbose_name="Дата публикации",
-                                    auto_now_add=True)
+    pub_date = models.DateTimeField(
+        verbose_name="Дата публикации", auto_now_add=True
+    )
 
     class Meta:
         ordering = ("-pub_date",)
@@ -97,8 +101,9 @@ class IngredientInRecipe(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         verbose_name="Количество ингредиента",
-        validators=(MinValueValidator(
-            1, message="Добавьте больше игредиентов"),),
+        validators=(
+            MinValueValidator(1, message="Добавьте больше игредиентов"),
+        ),
     )
 
     class Meta:
@@ -107,7 +112,7 @@ class IngredientInRecipe(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=("ingredient", "recipe"),
-                name="ingredient_in_recipe_repetition"
+                name="ingredient_in_recipe_repetition",
             ),
         )
 
@@ -149,13 +154,13 @@ class FavoriteRecipe(models.Model):
         User,
         verbose_name="Пользователь",
         on_delete=models.CASCADE,
-        related_name="favorites",
+        related_name="favorite",
     )
     recipe = models.ForeignKey(
         Recipe,
         verbose_name="Понравившийся рецепт",
         on_delete=models.CASCADE,
-        related_name="favorites",
+        related_name="favorite",
     )
 
     class Meta:

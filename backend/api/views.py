@@ -12,9 +12,14 @@ from recipes.filters import IngredientSearch, RecipeFilter
 from core.pagination import CustomPageNumberPagination
 
 from .permissions import IsAuthorOrAdminOrReadOnly
-from .serializers import (UserFollowSerializer, IngredientSerailizer,
-                          TagSerializer, RecipeReadSerializer,
-                          RecipeCreateSerializer, RecipePageSerializer)
+from .serializers import (
+    UserFollowSerializer,
+    IngredientSerailizer,
+    TagSerializer,
+    RecipeReadSerializer,
+    RecipeCreateSerializer,
+    RecipePageSerializer,
+)
 from .utils import download_shopping_cart
 
 from users.models import User, Subscription
@@ -54,9 +59,9 @@ class UserViewSet(DjoserUserViewSet):
     def me(self, request, *args, **kwargs):
         return super().me(request, *args, **kwargs)
 
-    @action(methods=["GET"],
-            detail=False,
-            permission_classes=[IsAuthenticated])
+    @action(
+        methods=["GET"], detail=False, permission_classes=[IsAuthenticated]
+    )
     def subscriptions(self, request, *args, **kwargs):
         authors_id = request.user.subscriber_subscriptions.values_list(
             "author_id", flat=True
@@ -68,9 +73,9 @@ class UserViewSet(DjoserUserViewSet):
         )
         return self.get_paginated_response(serializer.data)
 
-    @action(methods=["POST"],
-            detail=True,
-            permission_classes=[IsAuthenticated])
+    @action(
+        methods=["POST"], detail=True, permission_classes=[IsAuthenticated]
+    )
     def subscribe(self, request, *args, **kwargs):
         subscriber = request.user
         author = get_object_or_404(User, pk=kwargs.get("id"))
@@ -129,62 +134,82 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
 
-    @action(detail=True,
-            methods=['post', 'delete'],
-            permission_classes=[IsAuthenticated])
+    @action(
+        detail=True,
+        methods=["post", "delete"],
+        permission_classes=[IsAuthenticated],
+    )
     def favorite(self, request, pk=None):
         user = self.request.user
         recipe = get_object_or_404(Recipe, pk=pk)
 
-        if self.request.method == 'POST':
-            if FavoriteRecipe.objects.filter(user=user, recipe=recipe).exists():
-                return Response({'errors': 'Рецепт уже в избранном'},
-                                status=status.HTTP_400_BAD_REQUEST)
+        if self.request.method == "POST":
+            if FavoriteRecipe.objects.filter(
+                user=user, recipe=recipe
+            ).exists():
+                return Response(
+                    {"errors": "Рецепт уже в избранном"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             FavoriteRecipe.objects.create(user=user, recipe=recipe)
             serializer = RecipePageSerializer(
-                recipe, context={'request': request})
+                recipe, context={"request": request}
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if self.request.method == 'DELETE':
+        if self.request.method == "DELETE":
             if not FavoriteRecipe.objects.filter(
-                       user=user, recipe=recipe).exists():
-                return Response({'errors': 'Рецепта нет в избранном'},
-                                status=status.HTTP_400_BAD_REQUEST)
-            favorite = get_object_or_404(FavoriteRecipe,
-                                         user=user, recipe=recipe)
+                user=user, recipe=recipe
+            ).exists():
+                return Response(
+                    {"errors": "Рецепта нет в избранном"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            favorite = get_object_or_404(
+                FavoriteRecipe, user=user, recipe=recipe
+            )
             favorite.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    @action(detail=True,
-            methods=['post', 'delete'],
-            permission_classes=[IsAuthenticated])
+    @action(
+        detail=True,
+        methods=["post", "delete"],
+        permission_classes=[IsAuthenticated],
+    )
     def shopping_cart(self, request, pk=None):
         user = self.request.user
         recipe = get_object_or_404(Recipe, pk=pk)
 
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             if ShoppingList.objects.filter(user=user, recipe=recipe).exists():
-                return Response({'errors': 'Уже в списке'},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"errors": "Уже в списке"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             ShoppingList.objects.create(user=user, recipe=recipe)
             serializer = RecipePageSerializer(
-                recipe, context={'request': request})
+                recipe, context={"request": request}
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if self.request.method == 'DELETE':
-            if not ShoppingList.objects.filter(user=user,
-                                               recipe=recipe).exists():
-                return Response({'errors': 'Рецепта нет в списке покупок'},
-                                status=status.HTTP_400_BAD_REQUEST)
+        if self.request.method == "DELETE":
+            if not ShoppingList.objects.filter(
+                user=user, recipe=recipe
+            ).exists():
+                return Response(
+                    {"errors": "Рецепта нет в списке покупок"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             shopping_cart = get_object_or_404(
-                ShoppingList, user=user, recipe=recipe)
+                ShoppingList, user=user, recipe=recipe
+            )
             shopping_cart.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    @action(detail=False,
-            methods=['get'],
-            permission_classes=[IsAuthenticated])
+    @action(
+        detail=False, methods=["get"], permission_classes=[IsAuthenticated]
+    )
     def download_shopping_cart(self, request):
         return download_shopping_cart(self, request)

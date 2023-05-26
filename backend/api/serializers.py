@@ -54,7 +54,9 @@ class UserFollowSerializer(serializers.ModelSerializer):
     def validate(self, data):
         author = self.instance
         subscriber = self.context.get("request").user
-        if Subscription.objects.filter(subscriber=subscriber, author=author).exists():
+        if Subscription.objects.filter(
+            subscriber=subscriber, author=author
+        ).exists():
             raise ValidationError(
                 detail="Попытка повторной подписки",
                 code=status.HTTP_400_BAD_REQUEST,
@@ -87,17 +89,18 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
     """Сериализатор игредиента при создании рецепта"""
 
     id = PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
-    name = serializers.ReadOnlyField(source='ingredient.name')
+    name = serializers.ReadOnlyField(source="ingredient.name")
     measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit')
+        source="ingredient.measurement_unit"
+    )
 
     class Meta:
         model = IngredientInRecipe
-        fields = ('id', 'amount', 'name', 'measurement_unit')
+        fields = ("id", "amount", "name", "measurement_unit")
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['id'] = instance.ingredient.id
+        data["id"] = instance.ingredient.id
         return data
 
 
@@ -108,7 +111,7 @@ class RecipePageSerializer(ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
+        fields = ("id", "name", "image", "cooking_time")
 
 
 class RecipeReadSerializer(ModelSerializer):
@@ -117,7 +120,8 @@ class RecipeReadSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     ingredients = IngredientInRecipeSerializer(
-        source="recipeingredients", many=True)
+        source="recipeingredients", many=True
+    )
     image = Base64ImageField()
     is_favorited = SerializerMethodField(read_only=True)
     is_in_shopping_cart = SerializerMethodField(read_only=True)
@@ -154,7 +158,8 @@ class RecipeCreateSerializer(ModelSerializer):
     """Сериализатор для создания рецептов"""
 
     tags = serializers.PrimaryKeyRelatedField(
-        queryset=Tag.objects.all(), many=True)
+        queryset=Tag.objects.all(), many=True
+    )
     author = UserSerializer(read_only=True)
     ingredients = IngredientInRecipeSerializer(many=True)
     image = Base64ImageField()

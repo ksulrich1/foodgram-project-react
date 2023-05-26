@@ -59,7 +59,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
     @display(description="Общее число в избранном")
     def added_to_favorite(self, obj):
-        return obj.favorite.count()
+        return obj.favorites.count()
 
 
 @admin.register(IngredientInRecipe)
@@ -80,7 +80,7 @@ class FavoriteAdmin(admin.ModelAdmin):
 
 
 @admin.register(ShoppingList)
-class ShoppingCartAdmin(admin.ModelAdmin):
+class ShoppingListAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "recipe",
