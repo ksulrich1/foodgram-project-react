@@ -56,7 +56,7 @@ class UserFollowSerializer(serializers.ModelSerializer):
                 detail="Попытка повторной подписки",
                 code=status.HTTP_400_BAD_REQUEST,
             )
-        elif subscriber == author:
+        if subscriber == author:
             raise ValidationError(
                 detail="Попытка подписки на самого себя",
                 code=status.HTTP_400_BAD_REQUEST,
