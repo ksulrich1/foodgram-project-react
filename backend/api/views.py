@@ -2,13 +2,8 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.filters import IngredientSearch, RecipeFilter
-from recipes.models import (
-    FavoriteRecipe,
-    Ingredient,
-    Recipe,
-    ShoppingList,
-    Tag,
-)
+from recipes.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingList,
+                            Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
@@ -17,15 +12,9 @@ from users.models import Subscription, User
 
 from .pagination import CustomPageNumberPagination
 from .permissions import IsAuthorOrAdminOrReadOnly
-from .serializers import (
-    IngredientSerailizer,
-    RecipeCreateSerializer,
-    RecipePageSerializer,
-    RecipeReadSerializer,
-    TagSerializer,
-    UserFollowSerializer,
-    UserSerializer,
-)
+from .serializers import (IngredientSerailizer, RecipeCreateSerializer,
+                          RecipePageSerializer, RecipeReadSerializer,
+                          TagSerializer, UserFollowSerializer, UserSerializer)
 from .utils import download_shopping_cart
 
 
