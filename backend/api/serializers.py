@@ -1,21 +1,18 @@
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from drf_extra_fields.fields import Base64ImageField
-
+from recipes.models import (
+    FavoriteRecipe,
+    Ingredient,
+    IngredientInRecipe,
+    Recipe,
+    ShoppingList,
+    Tag,
+)
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
-
-
-from users.models import User, Subscription
-from recipes.models import (
-    Ingredient,
-    Tag,
-    IngredientInRecipe,
-    Recipe,
-    ShoppingList,
-    FavoriteRecipe,
-)
+from users.models import Subscription, User
 
 
 class UserSerializer(DjoserUserSerializer):
@@ -49,7 +46,11 @@ class UserFollowSerializer(serializers.ModelSerializer):
         read_only_fields = ("email", "username", "first_name", "last_name")
 
     def get_recipes(self, obj):
-        return []
+        recipes = obj.recipes.all()
+        serializer = RecipePageSerializer(
+            recipes, many=True, context=self.context
+        )
+        return serializer.data
 
     def validate(self, data):
         author = self.instance
@@ -143,15 +144,17 @@ class RecipeReadSerializer(ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context["request"].user
-        if user.is_anonymous:
-            return False
-        return FavoriteRecipe.objects.filter(user=user, recipe=obj).exists()
+        return (
+            not user.is_anonymous
+            and FavoriteRecipe.objects.filter(user=user, recipe=obj).exists()
+        )
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context["request"].user
-        if user.is_anonymous:
-            return False
-        return ShoppingList.objects.filter(user=user, recipe=obj).exists()
+        return (
+            not user.is_anonymous
+            and ShoppingList.objects.filter(user=user, recipe=obj).exists()
+        )
 
 
 class RecipeCreateSerializer(ModelSerializer):
@@ -176,19 +179,6 @@ class RecipeCreateSerializer(ModelSerializer):
             "text",
             "cooking_time",
         )
-
-    def validate_tags(self, value):
-        if not value:
-            raise ValidationError("Нужно добавить тег.")
-        return value
-
-    def validate_ingredients(self, value):
-        if not value:
-            raise ValidationError("Нужно добавить ингридиент.")
-        for i in value:
-            if i["amount"] <= 0:
-                raise ValidationError("Колличество должго быть больше 0")
-        return value
 
     def to_representation(self, instance):
         request = self.context.get("request")

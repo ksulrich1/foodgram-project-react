@@ -1,9 +1,7 @@
-from django_filters import rest_framework
-from rest_framework.filters import SearchFilter
 from django.contrib.auth import get_user_model
-
+from django_filters import rest_framework
 from recipes.models import Ingredient, Recipe
-
+from rest_framework.filters import SearchFilter
 
 User = get_user_model()
 
