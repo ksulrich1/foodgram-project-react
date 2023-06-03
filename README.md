@@ -1,7 +1,5 @@
 # Проект **Foodgram - "Продуктовый помощник"**
-
-# Проект YaMDb
-![workflow](https://github.com/ksulrich1/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
+![workflow](https://github.com/ksulrich1/foodgram-project-react/actions/workflows/foodgram_workflow.yaml/badge.svg)
 
 ### **Адрес проекта**
 http://130.193.54.66/admin/ Админка
