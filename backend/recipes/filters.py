@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django_filters import rest_framework
-from recipes.models import Ingredient, Recipe, Tag
+from recipes.models import Ingredient, Recipe
 from rest_framework.filters import SearchFilter
 
 User = get_user_model()
@@ -16,8 +16,7 @@ class IngredientSearch(SearchFilter):
 
 class RecipeFilter(rest_framework.FilterSet):
     author = rest_framework.ModelChoiceFilter(queryset=User.objects.all())
-    tags = rest_framework.ModelMultipleChoiceFilter(
-        queryset=Tag.objects.all(), to_field_name="slug")
+    tags = rest_framework.AllValuesMultipleFilter(field_name="tags__slug")
     is_favorited = rest_framework.BooleanFilter(method="filter_is_favorited")
     is_in_shopping_cart = rest_framework.BooleanFilter(
         method="filter_is_in_shopping_cart"
