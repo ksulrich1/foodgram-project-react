@@ -69,9 +69,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker-compose stop backend
-            sudo docker-compose rm -f backend
-            sudo docker image prune -af
+            cd Dev/foodgram/infra
+            sudo docker compose stop
+            sudo docker compose rm -f backend
+            sudo docker image rm -f ${{ secrets.DOCKER_USERNAME }}/foodgram-backend
+            rm -f .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -79,7 +81,8 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker-compose up -d
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend
+            sudo docker compose up -d
 
   send_message:
     runs-on: ubuntu-latest
