@@ -1,7 +1,14 @@
 # Проект **Foodgram - "Продуктовый помощник"**
 
-### **Адрес проекта**
+# Проект YaMDb
+![workflow](https://github.com/ksulrich1/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
+### **Адрес проекта**
+http://130.193.54.66/admin/ Админка
+http://130.193.54.66/api/docs/ Документация
+Админ:
+Email: admin@admin.ru
+Пароль: admin
 
 ### **Описание проекта:**
 сайт **Foodgram** - «Продуктовый помощник» <br>
@@ -15,17 +22,12 @@
 
 ### **Запуск проекта:**
 ```
-git clone git@github.com:ksulrich123/foodgram-project-react.git # клонируем проект
+git clone git@github.com:ksulrich1/foodgram-project-react.git # клонируем проект
 python -m venv venv # Создаем виртуальное окружение
 source /venv/Scripts/activate # Активируем виртуальное окружение
 cd infra/ # Переходим в папку infra/
 docker-compose up # Запуск docker-compose (Документация доступна по адресу http://localhost/api/docs/)
 
 ```
-
----
-
-### **Спецификация API Foodgram**
-Документация: http://localhost/api/docs/
 
 ---
