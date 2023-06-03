@@ -5,7 +5,8 @@ from recipes.models import IngredientInRecipe
 
 def download_shopping_cart(self, request):
     ingredients = (
-        IngredientInRecipe.objects.filter(recipe__shopping_list__user=request.user)
+        IngredientInRecipe.objects.filter(
+            recipe__shopping_list__user=request.user)
         .values("ingredient__name", "ingredient__measurement_unit")
         .annotate(amount=Sum("amount"))
     )
