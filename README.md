@@ -2,11 +2,11 @@
 ![workflow](https://github.com/ksulrich1/foodgram-project-react/actions/workflows/foodgram_workflow.yaml/badge.svg)
 
 ### **Адрес проекта**
-http://130.193.54.66/admin/ Админка
-http://130.193.54.66/api/docs/ Документация
-Админ:
-Email: admin@admin.ru
-Пароль: admin
+- http://130.193.54.66/admin/ Админка <br>
+- http://130.193.54.66/api/docs/ Документация <br>
+Админ: <br>
+- Email: admin@admin.ru <br>
+- Пароль: admin <br>
 
 ### **Описание проекта:**
 сайт **Foodgram** - «Продуктовый помощник» <br>
