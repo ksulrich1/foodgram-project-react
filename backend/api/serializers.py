@@ -61,6 +61,7 @@ class UserFollowSerializer(serializers.ModelSerializer):
                 detail="Попытка подписки на самого себя",
                 code=status.HTTP_400_BAD_REQUEST,
             )
+        
         return data
 
 

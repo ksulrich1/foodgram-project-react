@@ -45,36 +45,23 @@ class UsersViewSet(UserViewSet):
         author = get_object_or_404(User, id=id)
 
         if request.method == "POST":
-            if user.id == author.id:
-                return Response(
-                    {"detail": "Нельзя подписаться на себя"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if Subscription.objects.filter(author=author, user=user).exists():
-                return Response(
-                    {"detail": "Вы уже подписаны!"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
             Subscription.objects.create(user=user, author=author)
             serializer = UserFollowSerializer(
                 author, context={"request": request}
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        if request.method == "DELETE":
-            if not Subscription.objects.filter(
-                user=user, author=author
-            ).exists():
-                return Response(
-                    {"errors": "Вы не подписаны"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            subscription = get_object_or_404(
-                Subscription, user=user, author=author
+        if not Subscription.objects.filter(
+            user=user, author=author
+        ).exists():
+            return Response(
+                {"errors": "Вы не подписаны"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-            subscription.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        subscription = get_object_or_404(
+            Subscription, user=user, author=author
+        )
+        subscription.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
