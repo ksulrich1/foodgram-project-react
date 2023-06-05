@@ -60,7 +60,7 @@ class UserFollowSerializer(serializers.ModelSerializer):
             raise ValidationError(
                 detail="Попытка подписки на самого себя",
                 code=status.HTTP_400_BAD_REQUEST,
-            )    
+            )
         return data
 
 
